@@ -1,6 +1,7 @@
 package at.lk.otl.hw;
 
 
+import com.google.common.collect.Multimap;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -51,14 +52,27 @@ public class Mane {
     final Map<Pair<Integer, Integer>, Double> sortedSavings = sortByValue(savings);
 //    printSavingsMap(sortedSavings);
 
-    final int[] first = {5, 6, 7, 8};
-    final Combination combination = new Combination(first);
+    final int[] nodes = {1, 2, 9, 10};
+    final Combination combination = new Combination(nodes);
     final List<List<Integer>> permutations = combination.getPermutations();
 
     final TSPTourDistanceCalculator permutationCalculator = new TSPTourDistanceCalculator(permutations, distanceMatrix);
     final Map<String, Double> costs = sortByValue(permutationCalculator.getCosts());
-
+//
     costs.entrySet().forEach(System.out::println);
+
+    final List<Integer> seeds = Arrays.asList(6, 7, 10);
+    final ClusterDistanceCalculator clusterDistanceCalculator = new ClusterDistanceCalculator(distanceMatrix, seeds);
+    final Multimap<Integer, Double> clusterDistances = clusterDistanceCalculator.getClusterDistanceCosts();
+
+//    printClusterDistances(clusterDistances);
+
+  }
+
+  private void printClusterDistances(final Multimap<Integer, Double> clusterDistances) {
+    for (Integer key : clusterDistances.keySet()) {
+      System.out.println(key + " " + clusterDistances.get(key));
+    }
   }
 
   private void printSavingsMatrix(final double[][] matrix) {
